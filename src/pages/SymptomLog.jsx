@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { saveSymptomLog, addTrackedSymptom, getSymptomLogs } from '../store/localStore';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
+import SeverityBadge from '../components/SeverityBadge';
+import formatTime from '../utils/formatTime';
 
 const SymptomLog = () => {
   const [searchParams] = useSearchParams();
@@ -38,38 +41,14 @@ const SymptomLog = () => {
     { label: 'Svår', value: 'Svår', color: 'var(--severity-severe)' },
   ];
 
-  const getBadgeStyle = (sev) => {
-    switch(sev) {
-      case 'Svår': return { backgroundColor: 'var(--severity-severe)', color: '#fff' };
-      case 'Måttlig': return { backgroundColor: 'var(--severity-moderate)', color: '#000' };
-      case 'Lindrig': return { backgroundColor: 'var(--severity-mild)', color: '#000' };
-      default: return { backgroundColor: '#475569', color: '#fff' };
-    }
-  };
-
-  // Format date helper (e.g. "Idag kl 14:30" or "24 okt kl 14:30")
-  const formatTime = (isoString, dateString) => {
-    const d = new Date(isoString);
-    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    // Check if it's today
-    const today = new Date().toISOString().split('T')[0];
-    if (dateString === today) {
-      return `Idag kl ${time}`;
-    }
-    
-    // Otherwise return short date and time
-    return `${d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })} kl ${time}`;
-  };
-
   return (
     <div className="page-container">
-      <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
-        <button onClick={() => navigate('/')} style={{ color: 'var(--text-secondary)', fontSize: '1rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          &lt; Tillbaka
+      <div className="page-header">
+        <button onClick={() => navigate('/')} className="back-button" aria-label="Tillbaka till översikten">
+          <ChevronLeft size={20} /> Tillbaka
         </button>
-        <h1 style={{ margin: 0, fontSize: '1.2rem' }}>Lägg till tillfälle</h1>
-        <div style={{ width: '60px' }}></div>
+        <h1>Lägg till tillfälle</h1>
+        <div style={{ width: '90px' }}></div>
       </div>
 
       <div className="card">
@@ -86,21 +65,13 @@ const SymptomLog = () => {
 
       <div className="card">
         <h3 style={{ marginBottom: '1rem' }}>Allvarlighetsgrad</h3>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="segmented">
           {severityOptions.map(opt => (
             <button
               key={opt.value}
               onClick={() => setSeverity(opt.value)}
-              style={{
-                flex: 1,
-                padding: '1rem 0.5rem',
-                borderRadius: '8px',
-                border: severity === opt.value ? `2px solid ${opt.color}` : '1px solid var(--card-border)',
-                backgroundColor: severity === opt.value ? `${opt.color}20` : 'var(--bg-color)',
-                color: severity === opt.value ? opt.color : 'var(--text-primary)',
-                fontWeight: severity === opt.value ? 'bold' : 'normal',
-                cursor: 'pointer'
-              }}
+              className={`segmented-item ${severity === opt.value ? `active-severity-${opt.value.toLowerCase().replace(/[^a-z]/g, '')}` : ''}`.trim()}
+              style={severity === opt.value ? { color: opt.value === 'Svår' ? '#fff' : '#000' } : undefined}
             >
               {opt.label}
             </button>
@@ -132,30 +103,19 @@ const SymptomLog = () => {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {pastLogs.map(log => (
-              <div key={log.id} className="card" style={{ padding: '1rem', marginBottom: 0 }}>
+              <div key={log.id} className="card log-card">
                 <div className="flex-between" style={{ marginBottom: '0.5rem' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                  <span className="timestamp">
                     {formatTime(log.timestamp, log.date)}
                   </span>
-                  {log.severity && (
-                    <span style={{ 
-                      ...getBadgeStyle(log.severity),
-                      padding: '0.15rem 0.5rem', 
-                      borderRadius: '4px', 
-                      fontSize: '0.75rem', 
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase'
-                    }}>
-                      {log.severity}
-                    </span>
-                  )}
+                  <SeverityBadge severity={log.severity} />
                 </div>
                 {log.notes ? (
-                  <p style={{ fontSize: '0.9rem', margin: 0, fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+                  <p className="notes">
                     "{log.notes}"
                   </p>
                 ) : (
-                  <p style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-secondary)', opacity: 0.5 }}>
+                  <p className="no-notes">
                     Inga anteckningar.
                   </p>
                 )}

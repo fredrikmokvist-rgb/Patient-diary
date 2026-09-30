@@ -45,7 +45,8 @@ const Medications = () => {
         <h1 style={{ margin: 0 }}>Mina Mediciner</h1>
         <button 
           onClick={() => setIsAdding(!isAdding)}
-          style={{ color: 'var(--btn-primary)' }}
+          style={{ color: 'var(--btn-primary)', padding: '0.5rem', minHeight: '44px', minWidth: '44px' }}
+          aria-label={isAdding ? 'Avbryt lägg till medicin' : 'Lägg till medicin'}
         >
           {isAdding ? <X size={28} /> : <Plus size={28} />}
         </button>
@@ -103,12 +104,7 @@ const Medications = () => {
           return (
             <div 
               key={med.id} 
-              className="card flex-between" 
-              style={{ 
-                border: isTaken ? '1px solid var(--success-color)' : '1px solid var(--card-border)', 
-                opacity: isTaken ? 0.7 : 1,
-                marginBottom: 0
-              }}
+              className={`card med-card flex-between ${isTaken ? 'taken' : ''}`.trim()}
             >
               <div>
                 <h3 style={{ 
@@ -144,8 +140,11 @@ const Medications = () => {
                 disabled={isTaken}
                 style={{ 
                   color: isTaken ? 'var(--success-color)' : 'var(--text-secondary)',
-                  padding: '0.5rem'
+                  padding: '0.5rem',
+                  minHeight: '44px',
+                  minWidth: '44px'
                 }}
+                aria-label={isTaken ? `${med.name} är tagen` : `Markera ${med.name} som tagen`}
               >
                 {isTaken ? <CheckCircle size={32} /> : <Circle size={32} />}
               </button>
