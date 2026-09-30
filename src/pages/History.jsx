@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { getSymptomLogs } from '../store/localStore';
 import { isAfter, subDays, startOfDay } from 'date-fns';
 import { Activity } from 'lucide-react';
+import SeverityBadge from '../components/SeverityBadge';
+import formatTime from '../utils/formatTime';
 
 const History = () => {
   const [timeRange, setTimeRange] = useState('7'); // '7', '30', 'all'
@@ -70,13 +72,8 @@ const History = () => {
       case 'Svår': return { backgroundColor: 'var(--severity-severe)', color: '#fff' };
       case 'Måttlig': return { backgroundColor: 'var(--severity-moderate)', color: '#000' };
       case 'Lindrig': return { backgroundColor: 'var(--severity-mild)', color: '#000' };
-      default: return { backgroundColor: '#475569', color: '#fff' };
+      default: return { backgroundColor: 'var(--card-border)', color: '#fff' };
     }
-  };
-
-  const formatTime = (isoString) => {
-    const d = new Date(isoString);
-    return `${d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })} kl ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   };
 
   return (
@@ -89,7 +86,7 @@ const History = () => {
       </div>
 
       {/* Time Range Filter */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', background: 'var(--bg-color)', padding: '0.25rem', borderRadius: '12px' }}>
+      <div className="segmented" style={{ marginBottom: '1.5rem' }}>
         {[
           { label: '7 Dagar', value: '7' },
           { label: '30 Dagar', value: '30' },
@@ -98,17 +95,7 @@ const History = () => {
           <button
             key={opt.value}
             onClick={() => setTimeRange(opt.value)}
-            style={{
-              flex: 1,
-              padding: '0.5rem',
-              borderRadius: '8px',
-              border: 'none',
-              background: timeRange === opt.value ? 'var(--accent-color)' : 'transparent',
-              color: timeRange === opt.value ? '#fff' : 'var(--text-secondary)',
-              fontWeight: timeRange === opt.value ? 'bold' : 'normal',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
+            className={`segmented-item ${timeRange === opt.value ? 'active' : ''}`}
           >
             {opt.label}
           </button>
@@ -140,14 +127,10 @@ const History = () => {
                     <td style={{ padding: '0.75rem 1rem', fontWeight: 'bold' }}>{item.name}</td>
                     <td style={{ padding: '0.75rem 1rem' }}>{item.count} st</td>
                     <td style={{ padding: '0.75rem 1rem' }}>
-                      <span style={{ 
-                        ...getBadgeStyle(item.mostCommonSeverity), 
-                        padding: '0.2rem 0.5rem', 
-                        borderRadius: '4px', 
-                        fontSize: '0.75rem' 
-                      }}>
-                        {item.mostCommonSeverity}
-                      </span>
+                      <SeverityBadge severity={item.mostCommonSeverity !== 'Ingen data' ? item.mostCommonSeverity : null} />
+                      {item.mostCommonSeverity === 'Ingen data' && (
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Ingen data</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -165,30 +148,23 @@ const History = () => {
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {groupedLogs[summaryItem.name].map(log => (
-                  <div key={log.id} className="card" style={{ padding: '1rem', margin: 0, borderLeft: `3px solid ${getBadgeStyle(log.severity).backgroundColor || 'transparent'}` }}>
+                  <div 
+                    key={log.id} 
+                    className={`card log-card with-accent accent-severity-${(log.severity || '').toLowerCase().replace(/[^a-z]/g, '')}`.trim()}
+                    style={{ borderLeftColor: getBadgeStyle(log.severity).backgroundColor }}
+                  >
                     <div className="flex-between" style={{ marginBottom: '0.5rem' }}>
-                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                      <span className="timestamp">
                         {formatTime(log.timestamp)}
                       </span>
-                      {log.severity && (
-                        <span style={{ 
-                          ...getBadgeStyle(log.severity),
-                          padding: '0.15rem 0.5rem', 
-                          borderRadius: '4px', 
-                          fontSize: '0.75rem', 
-                          fontWeight: 'bold',
-                          textTransform: 'uppercase'
-                        }}>
-                          {log.severity}
-                        </span>
-                      )}
+                      <SeverityBadge severity={log.severity} />
                     </div>
                     {log.notes ? (
-                      <p style={{ fontSize: '0.9rem', margin: 0, fontStyle: 'italic', color: 'var(--text-primary)' }}>
+                      <p className="notes" style={{ color: 'var(--text-primary)' }}>
                         "{log.notes}"
                       </p>
                     ) : (
-                      <p style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-secondary)', opacity: 0.5 }}>
+                      <p className="no-notes">
                         Inga anteckningar
                       </p>
                     )}

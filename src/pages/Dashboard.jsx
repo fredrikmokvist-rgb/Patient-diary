@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTrackedSymptoms, getSymptomStatsToday, isOnboardingComplete } from '../store/localStore';
 import { useNavigate } from 'react-router-dom';
+import SeverityBadge from '../components/SeverityBadge';
 
 const Dashboard = () => {
   const [symptoms, setSymptoms] = useState([]);
@@ -20,16 +21,6 @@ const Dashboard = () => {
     setSymptoms(withStats);
   }, [navigate]);
 
-  const getBadgeStyle = (severity) => {
-    if (!severity) return {};
-    switch(severity) {
-      case 'Svår': return { backgroundColor: 'var(--severity-severe)', color: '#fff' };
-      case 'Måttlig': return { backgroundColor: 'var(--severity-moderate)', color: '#000' };
-      case 'Lindrig': return { backgroundColor: 'var(--severity-mild)', color: '#000' };
-      default: return { backgroundColor: '#475569', color: '#fff' };
-    }
-  };
-
   return (
     <div className="page-container">
       <h1>Följda Symtom</h1>
@@ -47,18 +38,7 @@ const Dashboard = () => {
               <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block' }}>Idag</span>
               <span style={{ fontWeight: '600' }}>{symp.count} gånger</span>
             </div>
-            {symp.latestSeverity && (
-              <span style={{ 
-                ...getBadgeStyle(symp.latestSeverity),
-                padding: '0.25rem 0.75rem', 
-                borderRadius: '4px', 
-                fontSize: '0.8rem', 
-                fontWeight: 'bold',
-                textTransform: 'uppercase'
-              }}>
-                {symp.latestSeverity}
-              </span>
-            )}
+            <SeverityBadge severity={symp.latestSeverity} />
           </div>
 
           <button 
