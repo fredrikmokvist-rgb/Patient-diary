@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'Patientdagbok',
         short_name: 'Dagbok',
         description: 'Din digitala patientdagbok för symtom och mediciner',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#f8fafc',
+        background_color: '#f8fafc',
         display: 'standalone',
         orientation: 'portrait',
         icons: [

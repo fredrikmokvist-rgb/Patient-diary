@@ -1,27 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
 
 :root {
-  --font-family: 'Outfit', sans-serif;
-  --bg-color: #000000;
-  --card-bg: #1c2333;
-  --card-border: #2a3449;
-  
-  --text-primary: #f8fafc;
-  --text-secondary: #a8b5c7;
-  
-  --btn-bg: #2a3449;
-  --btn-hover: #374151;
-  --btn-primary: #3b82f6;
-  --accent-color: #3b82f6;
-  --success-color: #22c55e;
-  
-  --severity-mild: #38bdf8;
-  --severity-moderate: #fbbf24;
-  --severity-severe: #ef4444;
-  
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --card-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.06);
+
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+
+  --btn-bg: #ffffff;
+  --btn-hover: #f1f5f9;
+  --btn-primary: #000000;
+  --accent-color: #2563eb;
+  --success-color: #16a34a;
+
+  --severity-mild: #0ea5e9;
+  --severity-moderate: #d97706;
+  --severity-severe: #dc2626;
+
+  --radius-sm: 12px;
+  --radius-md: 24px;
+  --radius-lg: 32px;
 }
 
 * {
@@ -36,7 +39,7 @@ body {
   min-height: 100vh;
   background-color: var(--bg-color);
   -webkit-font-smoothing: antialiased;
-  
+
   /* Mobilanpassningar (PWA) */
   user-select: none;
   -webkit-user-select: none;
@@ -59,7 +62,7 @@ button {
   cursor: pointer;
   border: none;
   background: none;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 
 button:active {
@@ -71,7 +74,7 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 label:focus-visible {
-  outline: 2px solid var(--btn-primary);
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -79,42 +82,54 @@ label:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 1.2rem;
+  padding: 1rem 1.5rem;
   border-radius: var(--radius-sm);
   font-weight: 600;
   width: 100%;
   font-size: 1rem;
   background-color: var(--btn-bg);
+  border: 1px solid var(--card-border);
   color: var(--text-primary);
 }
 
 .btn-primary {
   background-color: var(--btn-primary);
-  color: white;
+  border-color: var(--btn-primary);
+  color: #ffffff;
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .card {
   background: var(--card-bg);
   border-radius: var(--radius-md);
-  padding: 1.25rem;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
   margin-bottom: 1rem;
 }
 
 /* Typography */
-h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); text-align: center; }
+h1 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  text-align: center;
+}
 h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
-h3 { font-size: 1.1rem; font-weight: 600; }
-p { line-height: 1.5; color: var(--text-secondary); margin-bottom: 0.5rem; }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); }
+p { line-height: 1.6; color: var(--text-secondary); margin-bottom: 0.5rem; }
 
 /* Layout Helpers */
 .page-container {
   padding: 2rem 1.25rem;
-  padding-bottom: 7rem;
+  padding-bottom: 8rem;
   flex: 1;
   overflow-y: auto;
 }
@@ -159,7 +174,7 @@ input, textarea, select {
   padding: 1rem;
   border: 1px solid var(--card-border);
   border-radius: var(--radius-sm);
-  background-color: var(--bg-color);
+  background-color: var(--card-bg);
   color: var(--text-primary);
   margin-top: 0.5rem;
   font-size: 1rem;
@@ -167,7 +182,8 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--btn-primary);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-label {
@@ -180,17 +196,18 @@ input:focus, textarea:focus, select:focus {
 /* Severity badge */
 .badge {
   display: inline-block;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.badge-severe { background-color: var(--severity-severe); color: #fff; }
-.badge-moderate { background-color: var(--severity-moderate); color: #000; }
-.badge-mild { background-color: var(--severity-mild); color: #000; }
-.badge-none { background-color: #475569; color: #fff; }
+.badge-severe { background-color: #fee2e2; color: #b91c1c; }
+.badge-moderate { background-color: #fef3c7; color: #b45309; }
+.badge-mild { background-color: #e0f2fe; color: #0369a1; }
+.badge-none { background-color: #f1f5f9; color: #475569; }
 
 /* Segmented control (filter/väljare) */
 .segmented {
@@ -198,31 +215,31 @@ input:focus, textarea:focus, select:focus {
   gap: 0.5rem;
   background: var(--bg-color);
   padding: 0.25rem;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
 }
 
 .segmented-item {
   flex: 1;
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
   border-radius: 8px;
   border: 1px solid var(--card-border);
-  background: transparent;
+  background: var(--card-bg);
   color: var(--text-secondary);
   font-family: var(--font-family);
-  font-weight: normal;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .segmented-item.active {
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-  color: #fff;
-  font-weight: bold;
+  background: var(--btn-primary);
+  border-color: var(--btn-primary);
+  color: #ffffff;
+  font-weight: 600;
 }
 
-.segmented-item.active-severity-mild { background: var(--severity-mild); border-color: var(--severity-mild); color: #000; }
-.segmented-item.active-severity-moderate { background: var(--severity-moderate); border-color: var(--severity-moderate); color: #000; }
+.segmented-item.active-severity-mild { background: var(--severity-mild); border-color: var(--severity-mild); color: #fff; }
+.segmented-item.active-severity-moderate { background: var(--severity-moderate); border-color: var(--severity-moderate); color: #fff; }
 .segmented-item.active-severity-severe { background: var(--severity-severe); border-color: var(--severity-severe); color: #fff; }
 
 /* Medicin- och loggkort */
@@ -231,12 +248,11 @@ input:focus, textarea:focus, select:focus {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0;
-  border: 1px solid var(--card-border);
 }
 
 .med-card.taken {
-  border-color: var(--success-color);
-  opacity: 0.7;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
 }
 
 .med-card.taken h3 {
@@ -245,7 +261,6 @@ input:focus, textarea:focus, select:focus {
 }
 
 .log-card {
-  padding: 1rem;
   margin-bottom: 0;
 }
 
@@ -265,7 +280,7 @@ input:focus, textarea:focus, select:focus {
   font-size: 0.9rem;
   margin: 0;
   color: var(--text-secondary);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .log-card.with-accent {
