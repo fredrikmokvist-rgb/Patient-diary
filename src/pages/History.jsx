@@ -110,7 +110,7 @@ const History = () => {
         <>
           {/* Summary Table */}
           <div className="card" style={{ padding: '0', overflow: 'hidden', marginBottom: '2rem' }}>
-            <h3 style={{ padding: '1rem', margin: 0, borderBottom: '1px solid var(--card-border)', background: 'rgba(255,255,255,0.02)' }}>
+            <h3 style={{ padding: '1rem', margin: 0, borderBottom: '1px solid var(--card-border)', background: 'var(--bg-color)' }}>
               Sammanfattning
             </h3>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
@@ -123,7 +123,7 @@ const History = () => {
               </thead>
               <tbody>
                 {summaryData.map(item => (
-                  <tr key={item.name} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <tr key={item.name} style={{ borderBottom: '1px solid var(--card-border)' }}>
                     <td style={{ padding: '0.75rem 1rem', fontWeight: 'bold' }}>{item.name}</td>
                     <td style={{ padding: '0.75rem 1rem' }}>{item.count} st</td>
                     <td style={{ padding: '0.75rem 1rem' }}>
