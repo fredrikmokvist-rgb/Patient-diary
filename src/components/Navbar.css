@@ -4,11 +4,13 @@
   left: 0;
   right: 0;
   width: 100%;
-  
+  max-width: 600px;
+  margin: 0 auto;
+
   background: var(--card-bg);
-  border-top: 1px solid var(--card-border);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-  
+  border: 1px solid var(--card-border);
+  box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+
   display: flex;
   justify-content: space-around;
   padding: 0.75rem 0.5rem;
@@ -25,8 +27,8 @@
   color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1.5rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1.25rem;
   border-radius: var(--radius-sm);
 }
 
@@ -35,6 +37,6 @@
 }
 
 .nav-item.active {
-  color: var(--btn-primary);
-  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-color);
+  background: rgba(37, 99, 235, 0.08);
 }
